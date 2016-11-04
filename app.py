@@ -3,7 +3,7 @@ from flask import Flask, jsonify
 import psycopg2
 
 try:
-    conn = psycopg2.connect("dbname='screws' user='postgres' host='localhost' password='fakemail'")
+    conn = psycopg2.connect("dbname='screws' user='' host='localhost' password=''")
 except:
     print("I am unable to connect to the database")
     
