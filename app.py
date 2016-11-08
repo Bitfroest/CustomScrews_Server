@@ -8,9 +8,9 @@ try:
 except:
     print("I am unable to connect to the database")
     
-cur = conn.cursor()
 try:
-    cur.execute("""SELECT * from iso_4762 as i ORDER BY i.body_diameter ASC, i.body_length ASC""")
+    cur = conn.cursor()
+    cur.execute("""SELECT s.id,name,body_diameter,head_diameter,head_height,hexagon_diameter,hexagon_height,thread_length,body_length FROM iso_4762 as s LEFT OUTER JOIN iso_4762_length as l ON s.id = l.sid ORDER BY s.body_diameter ASC, l.body_length ASC""")
     rows = cur.fetchall()
 except:
     print("I can't drop our database!")
@@ -22,4 +22,4 @@ def get_tasks():
     return jsonify({'iso_4762': rows})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0',debug=True)
