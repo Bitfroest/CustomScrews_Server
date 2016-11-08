@@ -1,9 +1,10 @@
 #!flask/bin/python
 from flask import Flask, jsonify
 import psycopg2
+import config
 
 try:
-    conn = psycopg2.connect("dbname='screws' user='postgres' host='localhost' password='fakemail'")
+    conn = psycopg2.connect("dbname='"+config.database['dbname']+"' user='"+config.database['user']+"' host='"+config.database['host']+"' password='"+config.database['password']+"'")
 except:
     print("I am unable to connect to the database")
     
@@ -16,7 +17,7 @@ except:
 
 app = Flask(__name__)
 
-@app.route('/screws', methods=['GET'])
+@app.route('/', methods=['GET'])
 def get_tasks():
     return jsonify({'iso_4762': rows})
 
