@@ -67,7 +67,8 @@ def screw(id, screw_id):
     if request.method == 'PUT':
         data = request.get_json()
         if 'name' in data and 'body_diameter' in data and 'head_diameter' in data and 'head_height' in data and 'hexagon_diameter' in data and 'hexagon_height' in data:
-            sql = """UPDATE iso_4762 SET (name, body_diameter, head_diameter, head_height, hexagon_diameter, hexagon_height) = (%s,%s,%s,%s,%s,%s) WHERE id=%s RETURNING *;"""
+            sql = """UPDATE iso_4762 SET (name, body_diameter, head_diameter, head_height, hexagon_diameter, hexagon_height) = (%s,%s,%s,%s,%s,%s) WHERE id=%s AND id_users=%s RETURNING *;"""
+            insert = """INSERT INTO iso_4762 (name, body_diameter, head_diameter, head_height, hexagon_diameter, hexagon_height, id_users) SELECT %s,%s,%s,%s,%s,%s,%s WHERE NOT EXISTS (SELECT 1 FROM iso_4762 WHERE id=%s AND id_users=%s) RETURNING *;"""
             name = data.get("name")
             body_diameter = data.get("body_diameter")
             head_diameter = data.get("head_diameter")
@@ -77,8 +78,11 @@ def screw(id, screw_id):
             thread_length = data.get("thread_length")
             body_length = data.get("body_length")
             cur = get_db().cursor(cursor_factory=RealDictCursor)
-            cur.execute(sql, (name, body_diameter, head_diameter, head_height, hexagon_diameter, hexagon_height, screw_id,))
+            cur.execute(sql, (name, body_diameter, head_diameter, head_height, hexagon_diameter, hexagon_height, screw_id, id,))
             row = cur.fetchone()
+            if not row:
+                cur.execute(insert, (name, body_diameter, head_diameter, head_height, hexagon_diameter, hexagon_height, id, screw_id, id,))
+                row = cur.fetchone()
             get_db().commit()
             cur.close()
             return jsonify({'iso_4762': row})
