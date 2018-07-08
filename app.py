@@ -24,8 +24,8 @@ def get_db():
 @app.route('/', methods=['GET'])
 def get_tasks():
     try:
-        cur = get_db().cursor()
-        cur.execute("""SELECT s.id,name,body_diameter,head_diameter,head_height,hexagon_diameter,hexagon_height,thread_length,body_length FROM iso_4762 as s LEFT OUTER JOIN iso_4762_length as l ON s.id = l.sid ORDER BY s.body_diameter ASC, l.body_length ASC""")
+        cur = get_db().cursor(cursor_factory=RealDictCursor)
+        cur.execute("""SELECT s.id,name,body_diameter,head_diameter,head_height,hexagon_diameter,hexagon_height,thread_length,body_length FROM iso_4762 as s LEFT OUTER JOIN iso_4762_length as l ON s.id = l.sid WHERE s.id_users IS NULL ORDER BY s.body_diameter ASC, l.body_length ASC""")
         rows = cur.fetchall()
     except:
         print("I can't drop our database!")
