@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.9.1-beta" last-position="0,0" last-zoom="1"
+	 default-schema="public" default-owner="postgres">
+<database name="screws" encoding="UTF8" lc-collate="German_Germany.1252" lc-ctype="German_Germany.1252">
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
+</database>
+
+<schema name="public" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<sequence name="iso_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="2147483647"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<sequence name="length_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="2147483647"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="iso_4762">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="520" y="400"/>
+	<column name="id" not-null="true" sequence="public.iso_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="name">
+		<type name="text" length="0"/>
+	</column>
+	<column name="body_diameter">
+		<type name="real" length="0"/>
+	</column>
+	<column name="head_diameter">
+		<type name="real" length="0"/>
+	</column>
+	<column name="head_height">
+		<type name="real" length="0"/>
+	</column>
+	<column name="hexagon_diameter">
+		<type name="real" length="0"/>
+	</column>
+	<column name="hexagon_height">
+		<type name="real" length="0"/>
+	</column>
+	<column name="created">
+		<type name="timestamp" length="0"/>
+	</column>
+	<constraint name="id" type="pk-constr" table="public.iso_4762">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_users" index="8"/>
+	</customidxs>
+
+	<customidxs object-type="constraint">
+		<object name="users_fk" index="1"/>
+	</customidxs>
+</table>
+
+<table name="iso_4762_length">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1340" y="420"/>
+	<column name="id" not-null="true" sequence="public.length_id_seq">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="thread_length">
+		<type name="real" length="0"/>
+	</column>
+	<column name="body_length">
+		<type name="real" length="0"/>
+	</column>
+	<column name="sid" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="iso_4762_length_pkey" type="pk-constr" table="public.iso_4762_length">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="users">
+	<schema name="public"/>
+	<position x="1020" y="560"/>
+	<column name="id" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<column name="email">
+		<type name="text" length="0"/>
+	</column>
+	<column name="display_name">
+		<type name="text" length="0"/>
+	</column>
+	<column name="name">
+		<type name="text" length="0"/>
+	</column>
+	<constraint name="user_pk" type="pk-constr" table="public.users">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="user_has_many_iso_4762" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 custom-color="#83af1f"
+	 src-table="public.users"
+	 dst-table="public.iso_4762"
+	 src-required="false" dst-required="false"/>
+
+<constraint name="screwfk" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.iso_4762" table="public.iso_4762_length">
+	<columns names="sid" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_iso_4762_length_iso_4762" type="relfk"
+	 custom-color="#83af1f"
+	 src-table="public.iso_4762_length"
+	 dst-table="public.iso_4762"
+	 src-required="false" dst-required="false"/>
+
+</dbmodel>
