@@ -58,7 +58,7 @@ CREATE TABLE public.iso_4762(
 	hexagon_diameter real,
 	hexagon_height real,
 	created timestamp,
-	user_id_user text,
+	id_users text,
 	CONSTRAINT id PRIMARY KEY (id)
 
 );
@@ -80,9 +80,9 @@ CREATE TABLE public.iso_4762_length(
 ALTER TABLE public.iso_4762_length OWNER TO postgres;
 -- ddl-end --
 
--- object: public."user" | type: TABLE --
--- DROP TABLE IF EXISTS public."user" CASCADE;
-CREATE TABLE public."user"(
+-- object: public.users | type: TABLE --
+-- DROP TABLE IF EXISTS public.users CASCADE;
+CREATE TABLE public.users(
 	id text NOT NULL,
 	email text,
 	display_name text,
@@ -92,10 +92,10 @@ CREATE TABLE public."user"(
 );
 -- ddl-end --
 
--- object: user_fk | type: CONSTRAINT --
--- ALTER TABLE public.iso_4762 DROP CONSTRAINT IF EXISTS user_fk CASCADE;
-ALTER TABLE public.iso_4762 ADD CONSTRAINT user_fk FOREIGN KEY (user_id_user)
-REFERENCES public."user" (id) MATCH FULL
+-- object: users_fk | type: CONSTRAINT --
+-- ALTER TABLE public.iso_4762 DROP CONSTRAINT IF EXISTS users_fk CASCADE;
+ALTER TABLE public.iso_4762 ADD CONSTRAINT users_fk FOREIGN KEY (id_users)
+REFERENCES public.users (id) MATCH FULL
 ON DELETE SET NULL ON UPDATE CASCADE;
 -- ddl-end --
 
